@@ -1,1 +1,128 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Unbounded", "Manrope", sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f2f1ea;
+  --color-card: #fcfbf7;
+  --color-ink: #181b18;
+  --color-ink2: #60655e;
+  --color-ink3: #8f948c;
+  --color-line: #e2e0d5;
+  --color-line2: #d3d1c4;
+
+  --color-pine-950: #0a1410;
+  --color-pine-900: #101f19;
+  --color-pine-800: #17291f;
+  --color-pine-700: #20382b;
+  --color-pine-600: #2b4a39;
+
+  --color-moss-700: #154c37;
+  --color-moss-600: #1e6b4e;
+  --color-moss-500: #2a8463;
+  --color-moss-200: #bcd9c9;
+  --color-moss-100: #e0ede4;
+  --color-moss-50: #eef4ee;
+
+  --color-lime: #d9f25c;
+  --color-lime-2: #c4e13f;
+  --color-danger: #c2492f;
+  --color-danger-soft: #f8e6df;
+  --color-warn: #b57f17;
+  --color-warn-soft: #f6edd6;
+  --color-cobalt: #2b4bc0;
+  --color-cobalt-soft: #e2e8f8;
+}
+
+:root {
+  --acc: #1e6b4e;
+  --acc-soft: #e0ede4;
+  --acc-ink: #f4faf5;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #d9f25c; color: #101f19; }
+
+/* ---------- accent-driven utilities (storefront theming via CMS) ---------- */
+.bg-acc { background-color: var(--acc); }
+.bg-acc-soft { background-color: var(--acc-soft); }
+.text-acc { color: var(--acc); }
+.border-acc { border-color: var(--acc); }
+.ring-acc { --tw-ring-color: var(--acc); }
+.hover-acc:hover { background-color: color-mix(in srgb, var(--acc) 86%, black); }
+.text-acc-ink { color: var(--acc-ink); }
+
+/* ---------- signature motion ---------- */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 28s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 22s linear infinite; }
+
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.floaty { animation: floaty 6s ease-in-out infinite; }
+
+@keyframes shimmer { from { background-position: -400px 0; } to { background-position: 400px 0; } }
+.skeleton {
+  background: linear-gradient(90deg, #e8e6dc 25%, #f3f1e8 50%, #e8e6dc 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+@keyframes pop-in { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+.pop-in { animation: pop-in .45s cubic-bezier(.2,.7,.2,1) both; }
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.toast-in { animation: toast-in .3s cubic-bezier(.2,.7,.2,1) both; }
+
+@keyframes draw-line { from { stroke-dashoffset: var(--len, 1200); } to { stroke-dashoffset: 0; } }
+.draw-line { stroke-dasharray: var(--len, 1200); animation: draw-line 1.6s cubic-bezier(.4,0,.2,1) .15s both; }
+
+@keyframes grow-bar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.grow-bar { transform-origin: bottom; animation: grow-bar .7s cubic-bezier(.2,.7,.2,1) both; }
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.reveal.on { opacity: 1; transform: none; }
+
+/* dotted texture for hero */
+.dotgrid {
+  background-image: radial-gradient(color-mix(in srgb, var(--color-ink) 12%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.darkgrid {
+  background-image: radial-gradient(rgba(217,242,92,.09) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ---------- controls ---------- */
+.inp {
+  width: 100%; border: 1px solid var(--color-line2); background: var(--color-card);
+  border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--color-ink);
+  transition: border-color .15s, box-shadow .15s; outline: none;
+}
+.inp:focus { border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 16%, transparent); }
+.inp::placeholder { color: var(--color-ink3); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: #c9c7ba; border-radius: 8px; border: 2px solid var(--color-paper); }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- print (invoices) ---------- */
+@media print {
+  body * { visibility: hidden !important; }
+  .print-area, .print-area * { visibility: visible !important; }
+  .print-area { position: fixed !important; inset: 0 !important; overflow: visible !important; background: white !important; box-shadow: none !important; border: 0 !important; }
+  .no-print { display: none !important; }
+}
